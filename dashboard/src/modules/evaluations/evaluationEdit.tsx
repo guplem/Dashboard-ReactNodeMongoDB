@@ -1,12 +1,12 @@
-import { Edit, SimpleForm, TextInput, required, DateTimeInput, NumberInput } from "react-admin";
+import { DateTimeInput, Edit, NumberInput, SimpleForm, TextInput, required } from "react-admin";
 
 export const EvaluationEdit = () => (
   <Edit>
     <SimpleForm>
       <TextInput disabled label="Id" source="id" />
-      <NumberInput source="projectId" validate={[required()]} />
-      <NumberInput source="systemId" validate={[required()]} />
-      <NumberInput source="datasetId" validate={[required()]} />
+      <TextInput source="projectId" validate={[required()]} />
+      <TextInput source="systemId" validate={[required()]} />
+      <TextInput source="datasetId" validate={[required()]} />
       <NumberInput source="score" validate={[required()]} />
       <NumberInput source="accuracy" />
       <NumberInput source="helpfulness" />

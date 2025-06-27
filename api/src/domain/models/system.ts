@@ -1,7 +1,7 @@
 import { Model } from "./iModel";
 
 export class System extends Model<System> {
-  constructor(public id: number, public name: string) {
+  constructor(public id: string, public name: string) {
     super();
   }
 

@@ -1,9 +1,9 @@
-import { Show, SimpleShowLayout, TextField, useInfiniteGetList, useShowController } from "react-admin";
-import { Card, CardContent, Typography, Button, Chip } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
-import { Box } from "@mui/system";
-import { PieChart, Pie, Cell } from "recharts";
+import { Button, Card, CardContent, Chip, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { Box } from "@mui/system";
+import { Show, SimpleShowLayout, TextField, useInfiniteGetList, useShowController } from "react-admin";
+import { useNavigate, useParams } from "react-router-dom";
+import { Cell, Pie, PieChart } from "recharts";
 import { Evaluation } from "../evaluations/iEvaluation";
 
 const RADIAN = Math.PI / 180;
@@ -64,11 +64,10 @@ export const ProjectShow = () => {
   const { id } = useParams();
 
   const { record } = useShowController();
-
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteGetList<Evaluation>("evaluations", {
     pagination: { page: 1, perPage: 10 },
     sort: { field: "score", order: "DESC" },
-    filter: { projectId: Number(id) },
+    filter: { projectId: id },
   });
 
   return (

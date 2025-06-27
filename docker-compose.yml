@@ -30,16 +30,15 @@ services:
       - database
     networks:
       - app-network
-
   database:
-    image: mysql:8.0 # Use the official MySQL image from Docker Hub
+    image: mongo:8.0.10 # Use the official MongoDB image from Docker Hub
     environment:
-      MYSQL_ROOT_PASSWORD: db-password-secure
-      MYSQL_DATABASE: mydb
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: db-password-secure
     ports:
-      - "3306:3306"
+      - "27017:27017"
     volumes:
-      - ./database/data:/var/lib/mysql # Persist data within the host machine
+      - ./database/data:/data/db # Persist data within the host machine
     networks:
       - app-network
 

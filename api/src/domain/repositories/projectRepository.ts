@@ -9,13 +9,12 @@ export interface ProjectRepository {
    * @returns A promise that resolves to an object containing the projects and the total count.
    */
   getList(sort: string[], range: number[], filter: { [key: string]: any }): Promise<{ projects: Project[]; total: number }>;
-
   /**
    * Retrieves a single project by its ID.
-   * @param id - The ID of the project, e.g., 123
+   * @param id - The ID of the project, e.g., "507f1f77bcf86cd799439011"
    * @returns A promise that resolves to the project.
    */
-  getOne(id: number): Promise<Project>;
+  getOne(id: string): Promise<Project>;
 
   /**
    * Retrieves multiple projects based on filter criteria.
@@ -37,19 +36,18 @@ export interface ProjectRepository {
    * @returns A promise that resolves to the created project.
    */
   create(project: Project): Promise<Project>;
-
   /**
    * Updates a project by its ID.
-   * @param id - The ID of the project, e.g., 123
+   * @param id - The ID of the project, e.g., "507f1f77bcf86cd799439011"
    * @param project - The project data to update.
    * @returns A promise that resolves to the updated project.
    */
-  update(id: number, project: Project): Promise<Project>;
+  update(id: string, project: Project): Promise<Project>;
 
   /**
    * Deletes a project by its ID.
-   * @param id - The ID of the project, e.g., 123
+   * @param id - The ID of the project, e.g., "507f1f77bcf86cd799439011"
    * @returns A promise that resolves when the project is deleted.
    */
-  delete(id: number): Promise<void>;
+  delete(id: string): Promise<void>;
 }

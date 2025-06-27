@@ -11,10 +11,8 @@ export class PostService {
   getList(sort: string[], range: number[], filter: { [key: string]: any }): Promise<{ posts: Post[]; total: number }> {
     return this.postRepository.getList(sort, range, filter);
   }
-
   getOne(id: number | string): Promise<Post> {
-    const idNumber = typeof id === "string" ? parseInt(id, 10) : id;
-    return this.postRepository.getOne(idNumber);
+    return this.postRepository.getOne(id as string);
   }
 
   getMany(filter: { [key: string]: any }): Promise<Post[]> {
@@ -26,12 +24,10 @@ export class PostService {
   }
 
   update(id: number | string, post: Post): Promise<Post> {
-    const idNumber = typeof id === "string" ? parseInt(id, 10) : id;
-    return this.postRepository.update(idNumber, post);
+    return this.postRepository.update(id as string, post);
   }
 
   delete(id: number | string): Promise<void> {
-    const idNumber = typeof id === "string" ? parseInt(id, 10) : id;
-    return this.postRepository.delete(idNumber);
+    return this.postRepository.delete(id as string);
   }
 }

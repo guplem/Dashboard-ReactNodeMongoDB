@@ -11,10 +11,8 @@ export class ProjectService {
   getList(sort: string[], range: number[], filter: { [key: string]: any }): Promise<{ projects: Project[]; total: number }> {
     return this.projectRepository.getList(sort, range, filter);
   }
-
   getOne(id: number | string): Promise<Project> {
-    const idNumber = typeof id === "string" ? parseInt(id, 10) : id;
-    return this.projectRepository.getOne(idNumber);
+    return this.projectRepository.getOne(id as string);
   }
 
   getMany(filter: { [key: string]: any }): Promise<Project[]> {
@@ -26,12 +24,10 @@ export class ProjectService {
   }
 
   update(id: number | string, project: Project): Promise<Project> {
-    const idNumber = typeof id === "string" ? parseInt(id, 10) : id;
-    return this.projectRepository.update(idNumber, project);
+    return this.projectRepository.update(id as string, project);
   }
 
   delete(id: number | string): Promise<void> {
-    const idNumber = typeof id === "string" ? parseInt(id, 10) : id;
-    return this.projectRepository.delete(idNumber);
+    return this.projectRepository.delete(id as string);
   }
 }

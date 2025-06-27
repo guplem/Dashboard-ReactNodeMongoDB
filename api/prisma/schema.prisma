@@ -8,18 +8,18 @@
 // See the documentation for all the connection string options: https://pris.ly/d/connection-strings
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String   @unique
   content   String?
   createdAt DateTime @default(now())
 }
@@ -45,38 +45,38 @@ enum ProjectType {
 }
 
 model Project {
-  id                Int         @id @default(autoincrement())
-  name              String
-  type              ProjectType @default(RAG)
-  conformityProgress Decimal    @default(0.0)
-  evaluations       Evaluation[] @relation("ProjectEvaluations")
+  id                 String       @id @default(auto()) @map("_id") @db.ObjectId
+  name               String       @unique
+  type               ProjectType  @default(RAG)
+  conformityProgress Float
+  evaluations        Evaluation[] @relation("ProjectEvaluations")
 }
 
 model System {
-  id       Int         @id @default(autoincrement())
-  name     String
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String       @unique
   evaluations Evaluation[] @relation("SystemEvaluations")
 }
 
 model Dataset {
-  id       Int         @id @default(autoincrement())
-  name     String
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String       @unique
   evaluations Evaluation[] @relation("DatasetEvaluations")
 }
 
 model Evaluation {
-  id        Int      @id @default(autoincrement())
-  projectId Int
-  systemId  Int
-  datasetId Int
-  score     Decimal  @default(0.0)
-  accuracy  Decimal? 
-  relevancy Decimal?
-  helpfulness Decimal?
-  toxicity  Decimal?
-  date      DateTime @default(now())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectId   String   @db.ObjectId
+  systemId    String   @db.ObjectId
+  datasetId   String   @db.ObjectId
+  score       Float    @default(0.0)
+  accuracy    Float?
+  relevancy   Float?
+  helpfulness Float?
+  toxicity    Float?
+  date        DateTime @default(now())
 
-  project   Project  @relation("ProjectEvaluations", fields: [projectId], references: [id], onDelete: Cascade)
-  system    System   @relation("SystemEvaluations", fields: [systemId], references: [id], onDelete: Cascade)
-  dataset   Dataset  @relation("DatasetEvaluations", fields: [datasetId], references: [id], onDelete: Cascade)
+  project Project @relation("ProjectEvaluations", fields: [projectId], references: [id])
+  system  System  @relation("SystemEvaluations", fields: [systemId], references: [id])
+  dataset Dataset @relation("DatasetEvaluations", fields: [datasetId], references: [id])
 }

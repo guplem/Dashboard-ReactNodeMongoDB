@@ -1,6 +1,6 @@
 # Full Stack Compliance Dashboard
 
-This project is a full-stack application designed to monitor and track the conformity progress of multiple LLM-based systems, providing detailed evaluation results. It combines a React-based frontend, a Node.js/Express API backend, and a MySQL database, all containerized for seamless deployment.
+This project is a full-stack application designed to monitor and track the conformity progress of multiple LLM-based systems, providing detailed evaluation results. It combines a React-based frontend, a Node.js/Express API backend, and a MongoDB database, all containerized for seamless deployment.
 
 ---
 
@@ -18,14 +18,14 @@ This project is a full-stack application designed to monitor and track the confo
 - **Express**: Provides robust routing and API logic.
 - **Prisma ORM**: Handles database interactions, migrations, and schema management.
 
-### 3. **Database (MySQL)**
+### 3. **Database (MongoDB)**
 
-- **MySQL**: Stores system and evaluation data.
+- **MongoDB**: Stores system and evaluation data in a MongoDB database. For production, this is hosted on MongoDB Atlas.
 - **Prisma**: Ensures efficient and reliable database access and management.
 
 ### 4. **Containerization (Docker & Docker Compose)**
 
-- **Docker**: Packages the frontend, API, and MySQL database into isolated containers.
+- **Docker**: Packages the frontend, API, and MongoDB database into isolated containers.
 - **Docker Compose**: Manages multi-container applications, networking, and volumes.
 
 ### 5. **Testing Tools**
@@ -129,66 +129,38 @@ The project is containerized for both development and production.
 
 - **Frontend**: Served on `http://localhost:3000`.
 - **Backend**: Available at `http://localhost:3001`.
-- **Database**: MySQL accessible at `localhost:3306`.
+- **Database**: MongoDB accessible at `localhost:27017`.
 
 > The development uses the .env files to configure the services.
 
 ### Production
 
-- Deployed using **Google Cloud Platform (GCP)** services like **Cloud Run** and **Cloud SQL**.
+- Deployed using **Google Cloud Platform (GCP)** services like **Cloud Run** and **MongoDB Atlas**.
 
 > The production configuration is set up in .YAML files for the services in the cloud.
 
 ---
 
-## Database Migrations
+## Database Schema Management
 
-Database migrations ensure schema changes are consistently applied.
+With MongoDB, Prisma does not use SQL-style migrations. Schema changes are managed directly through the `schema.prisma` file.
 
-### Creating a New Migration
+#### Applying Schema Changes
 
-1. **Update the Prisma schema** in `api/prisma/schema.prisma`.
-2. **Access the API container**:
+1.  **Update the Prisma schema** in `api/prisma/schema.prisma`.
 
-   ```bash
-   docker exec -it <container_id> sh
-   ```
+2.  **Regenerate the Prisma client** to reflect the changes:
+    ```bash
+    npx prisma generate
+    ```
 
-   > Replace `<container_id>` with the ID of the API container found running `docker ps`.
-
-3. Navigate to the app directory:
-
-   ```bash
-   cd /app
-   ```
-
-4. Create the migration:
-
-   ```bash
-   npx prisma migrate dev --name <migration_name>
-   ```
-
-   > Replace `<migration_name>` with a descriptive name for the migration.
-
-5. Deploy the migration:
-
-   ```bash
-   npx prisma migrate deploy
-   ```
-
-6. Regenerate the Prisma client:
-
-   ```bash
-   npx prisma generate
-   ```
-
-> This ensures the Prisma client reflects the latest schema changes.
+In development, you can use `npx prisma db push` to sync your schema with the database, but this is often not necessary.
 
 ---
 
 ## Deployment to Google Cloud Platform (GCP)
 
-The project uses **GCP Cloud Run** and **Cloud SQL** for scalable, managed deployment.
+The project uses **GCP Cloud Run** for services and **MongoDB Atlas** for a scalable, managed database.
 
 ### Prerequisites
 
@@ -210,13 +182,13 @@ The project uses **GCP Cloud Run** and **Cloud SQL** for scalable, managed deplo
 2. **Tag the image**:
 
    ```bash
-   docker tag dashboard-api eu.gcr.io/dashboard-reactnodesql/dashboard-api:latest
+   docker tag dashboard-api eu.gcr.io/dashboard-reactnodemongo/dashboard-api:latest
    ```
 
 3. **Push the image to Artifact Registry**:
 
    ```bash
-   docker push eu.gcr.io/dashboard-reactnodesql/dashboard-api:latest
+   docker push eu.gcr.io/dashboard-reactnodemongo/dashboard-api:latest
    ```
 
 4. Deploy in **Cloud Run**:
@@ -235,13 +207,13 @@ The project uses **GCP Cloud Run** and **Cloud SQL** for scalable, managed deplo
 2. **Tag the image**:
 
    ```bash
-   docker tag dashboard-front eu.gcr.io/dashboard-reactnodesql/dashboard-front:latest
+   docker tag dashboard-front eu.gcr.io/dashboard-reactnodemongo/dashboard-front:latest
    ```
 
 3. **Push the image to Artifact Registry**:
 
    ```bash
-   docker push eu.gcr.io/dashboard-reactnodesql/dashboard-front:latest
+   docker push eu.gcr.io/dashboard-reactnodemongo/dashboard-front:latest
    ```
 
 4. Deploy in **Cloud Run**:
@@ -266,8 +238,8 @@ Follow these steps to set up the project locally and run it using Docker Compose
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/guplem/Dashboard-ReactNodeSQL.git
-   cd Dashboard-ReactNodeSQL
+   git clone https://github.com/guplem/Dashboard-ReactNodeMongoDB.git
+   cd Dashboard-ReactNodeMongoDB
    ```
 
 2. Build and start the containers:

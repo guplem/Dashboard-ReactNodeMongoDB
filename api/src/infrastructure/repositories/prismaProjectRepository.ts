@@ -1,6 +1,6 @@
+import { PrismaClient, ProjectType } from "@prisma/client";
 import { Project } from "../../domain/models/project";
 import { ProjectRepository } from "../../domain/repositories/projectRepository";
-import { PrismaClient, ProjectType } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -28,7 +28,7 @@ export class PrismaProjectRepository implements ProjectRepository {
     return { projects: projects.map((project) => Project.fromMap(project)), total };
   }
 
-  async getOne(id: number): Promise<Project> {
+  async getOne(id: string): Promise<Project> {
     const project = await prisma.project.findUnique({ where: { id } });
     if (!project) throw new Error("Project not found");
     return Project.fromMap(project);
@@ -55,7 +55,7 @@ export class PrismaProjectRepository implements ProjectRepository {
     return Project.fromMap(createdProject);
   }
 
-  async update(id: number, project: Project): Promise<Project> {
+  async update(id: string, project: Project): Promise<Project> {
     const updatedProject = await prisma.project.update({
       where: { id },
       data: {
@@ -67,7 +67,7 @@ export class PrismaProjectRepository implements ProjectRepository {
     return Project.fromMap(updatedProject);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await prisma.project.delete({ where: { id } });
   }
 }

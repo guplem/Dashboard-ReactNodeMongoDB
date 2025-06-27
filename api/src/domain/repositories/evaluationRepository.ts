@@ -9,13 +9,12 @@ export interface EvaluationRepository {
    * @returns A promise that resolves to an object containing the evaluations and the total count.
    */
   getList(sort: string[], range: number[], filter: { [key: string]: any }): Promise<{ evaluations: Evaluation[]; total: number }>;
-
   /**
    * Retrieves a single evaluation by its ID.
-   * @param id - The ID of the evaluation, e.g., 123
+   * @param id - The ID of the evaluation, e.g., "507f1f77bcf86cd799439011"
    * @returns A promise that resolves to the evaluation.
    */
-  getOne(id: number): Promise<Evaluation>;
+  getOne(id: string): Promise<Evaluation>;
 
   /**
    * Retrieves multiple evaluations based on filter criteria.
@@ -37,19 +36,18 @@ export interface EvaluationRepository {
    * @returns A promise that resolves to the created evaluation.
    */
   create(evaluation: Evaluation): Promise<Evaluation>;
-
   /**
    * Updates a evaluation by its ID.
-   * @param id - The ID of the evaluation, e.g., 123
+   * @param id - The ID of the evaluation, e.g., "507f1f77bcf86cd799439011"
    * @param evaluation - The evaluation data to update.
    * @returns A promise that resolves to the updated evaluation.
    */
-  update(id: number, evaluation: Evaluation): Promise<Evaluation>;
+  update(id: string, evaluation: Evaluation): Promise<Evaluation>;
 
   /**
    * Deletes a evaluation by its ID.
-   * @param id - The ID of the evaluation, e.g., 123
+   * @param id - The ID of the evaluation, e.g., "507f1f77bcf86cd799439011"
    * @returns A promise that resolves when the evaluation is deleted.
    */
-  delete(id: number): Promise<void>;
+  delete(id: string): Promise<void>;
 }

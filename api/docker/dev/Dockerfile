@@ -1,11 +1,7 @@
 # Use official Node.js image as a parent image
 FROM node:22
 
-# Install mysql-client to check if MySQL is up 
-RUN apt-get update && \
-    apt-get install -y default-mysql-client
-
-# Download wait-for-it.sh script to wait for MySQL connection to be ready
+# Download wait-for-it.sh script to wait for MongoDB connection to be ready
 RUN curl -o /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
     chmod +x /usr/local/bin/wait-for-it.sh
 

@@ -1,14 +1,14 @@
-import { Model } from "./iModel";
 import { Dataset } from "./dataset";
+import { Model } from "./iModel";
 import { Project } from "./project";
 import { System } from "./system";
 
 export class Evaluation extends Model<Evaluation> {
   constructor(
-    public id: number,
-    public projectId: number,
-    public systemId: number,
-    public datasetId: number,
+    public id: string,
+    public projectId: string,
+    public systemId: string,
+    public datasetId: string,
     public score: number,
     public accuracy?: number | null,
     public relevancy?: number | null,

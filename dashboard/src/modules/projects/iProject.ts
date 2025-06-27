@@ -1,7 +1,7 @@
 import { ProjectType } from "./projectTypes";
 
 export interface Project {
-  id: number;
+  id: string;
   name: string;
   type: ProjectType;
   conformityProgress: number;

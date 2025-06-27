@@ -7,354 +7,89 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Demo posts
-
   await prisma.post.upsert({
-    where: { id: 1 },
+    where: { title: "Check out Prisma with Next.js" },
     update: {},
     create: {
-      id: 1,
       title: "Check out Prisma with Next.js",
       content: "https://www.prisma.io/nextjs",
     },
   });
-
   await prisma.post.upsert({
-    where: { id: 2 },
+    where: { title: "Follow Prisma on Twitter" },
     update: {},
     create: {
-      id: 2,
-
       title: "Follow Prisma on Twitter",
       content: "https://twitter.com/prisma",
     },
   });
-
   await prisma.post.upsert({
-    where: { id: 3 },
+    where: { title: "Follow Nexus on Twitter" },
     update: {},
     create: {
-      id: 3,
       title: "Follow Nexus on Twitter",
       content: "https://twitter.com/nexusgql",
     },
   });
 
   // LLMs projects and evaluations
-
   await prisma.project.upsert({
-    where: { id: 1 },
+    where: { name: "customer help" },
     update: {},
-    create: {
-      id: 1,
-      name: "customer help",
-      type: ProjectType.Chatbot,
-      conformityProgress: 0.9,
-    },
+    create: { name: "customer help", type: ProjectType.Chatbot, conformityProgress: 0.9 },
   });
-
   await prisma.project.upsert({
-    where: { id: 2 },
+    where: { name: "TOS extractor" },
     update: {},
-    create: {
-      id: 2,
-      name: "TOS extractor",
-      type: ProjectType.RAG,
-      conformityProgress: 0.7,
-    },
+    create: { name: "TOS extractor", type: ProjectType.RAG, conformityProgress: 0.7 },
   });
-
   await prisma.project.upsert({
-    where: { id: 3 },
+    where: { name: "pdf2json" },
     update: {},
-    create: {
-      id: 3,
-      name: "pdf2json",
-      type: ProjectType.Converter,
-      conformityProgress: 0.2,
-    },
+    create: { name: "pdf2json", type: ProjectType.Converter, conformityProgress: 0.2 },
   });
 
   // Systems
-
-  await prisma.system.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
-      id: 1,
-      name: "Mixtral-8x7B-finetuned",
-    },
-  });
-
-  await prisma.system.upsert({
-    where: { id: 2 },
-    update: {},
-    create: {
-      id: 2,
-      name: "Mixtral-8x7B-prompt01",
-    },
-  });
-
-  await prisma.system.upsert({
-    where: { id: 3 },
-    update: {},
-    create: {
-      id: 3,
-      name: "Mixtral-8x7B-prompt02",
-    },
-  });
-
-  await prisma.system.upsert({
-    where: { id: 4 },
-    update: {},
-    create: {
-      id: 4,
-      name: "Llama3_RAG_ch200_th07",
-    },
-  });
-
-  await prisma.system.upsert({
-    where: { id: 5 },
-    update: {},
-    create: {
-      id: 5,
-      name: "Llama3_RAG_ch250_th07",
-    },
-  });
-
-  await prisma.system.upsert({
-    where: { id: 6 },
-    update: {},
-    create: {
-      id: 6,
-      name: "Mixtral_RAG_ch200_th08",
-    },
-  });
-
-  await prisma.system.upsert({
-    where: { id: 7 },
-    update: {},
-    create: {
-      id: 7,
-      name: "Mixtral_RAG_ch200_th07",
-    },
-  });
-
-  await prisma.system.upsert({
-    where: { id: 8 },
-    update: {},
-    create: {
-      id: 8,
-      name: "GPT4o-base",
-    },
-  });
-
-  await prisma.system.upsert({
-    where: { id: 9 },
-    update: {},
-    create: {
-      id: 9,
-      name: "llama-11b-vision-instruct-base",
-    },
-  });
+  await prisma.system.upsert({ where: { name: "Mixtral-8x7B-finetuned" }, update: {}, create: { name: "Mixtral-8x7B-finetuned" } });
+  await prisma.system.upsert({ where: { name: "Mixtral-8x7B-prompt01" }, update: {}, create: { name: "Mixtral-8x7B-prompt01" } });
+  await prisma.system.upsert({ where: { name: "Mixtral-8x7B-prompt02" }, update: {}, create: { name: "Mixtral-8x7B-prompt02" } });
+  await prisma.system.upsert({ where: { name: "Llama3_RAG_ch200_th07" }, update: {}, create: { name: "Llama3_RAG_ch200_th07" } });
+  await prisma.system.upsert({ where: { name: "Llama3_RAG_ch250_th07" }, update: {}, create: { name: "Llama3_RAG_ch250_th07" } });
+  await prisma.system.upsert({ where: { name: "Mixtral_RAG_ch200_th08" }, update: {}, create: { name: "Mixtral_RAG_ch200_th08" } });
+  await prisma.system.upsert({ where: { name: "Mixtral_RAG_ch200_th07" }, update: {}, create: { name: "Mixtral_RAG_ch200_th07" } });
+  await prisma.system.upsert({ where: { name: "GPT4o-base" }, update: {}, create: { name: "GPT4o-base" } });
+  await prisma.system.upsert({ where: { name: "llama-11b-vision-instruct-base" }, update: {}, create: { name: "llama-11b-vision-instruct-base" } });
 
   // Datasets
-
-  await prisma.dataset.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
-      id: 1,
-      name: "QandA01",
-    },
-  });
-
-  await prisma.dataset.upsert({
-    where: { id: 2 },
-    update: {},
-    create: {
-      id: 2,
-      name: "QandA02",
-    },
-  });
-
-  await prisma.dataset.upsert({
-    where: { id: 3 },
-    update: {},
-    create: {
-      id: 3,
-      name: "TOS01",
-    },
-  });
-
-  await prisma.dataset.upsert({
-    where: { id: 4 },
-    update: {},
-    create: {
-      id: 4,
-      name: "CustomerPetition01",
-    },
-  });
+  await prisma.dataset.upsert({ where: { name: "QandA01" }, update: {}, create: { name: "QandA01" } });
+  await prisma.dataset.upsert({ where: { name: "QandA02" }, update: {}, create: { name: "QandA02" } });
+  await prisma.dataset.upsert({ where: { name: "TOS01" }, update: {}, create: { name: "TOS01" } });
+  await prisma.dataset.upsert({ where: { name: "CustomerPetition01" }, update: {}, create: { name: "CustomerPetition01" } });
 
   // Evaluations
+  await prisma.evaluation.deleteMany({}); // Clean slate for evaluations
 
-  await prisma.evaluation.upsert({
-    where: { id: 1 },
-    update: {},
-    create: {
-      id: 1,
-      projectId: 1,
-      systemId: 1,
-      datasetId: 1,
-      accuracy: 0.9,
-      relevancy: 0.8,
-      helpfulness: 0.7,
-      toxicity: 0.1,
-      score: 0.8,
-    },
-  });
+  const projects = await prisma.project.findMany({ select: { id: true, name: true } });
+  const systems = await prisma.system.findMany({ select: { id: true, name: true } });
+  const datasets = await prisma.dataset.findMany({ select: { id: true, name: true } });
 
-  await prisma.evaluation.upsert({
-    where: { id: 2 },
-    update: {},
-    create: {
-      id: 2,
-      projectId: 1,
-      systemId: 2,
-      datasetId: 1,
-      accuracy: 0.8,
-      relevancy: 0.7,
-      helpfulness: 0.6,
-      toxicity: 0.2,
-      score: 0.7,
-    },
-  });
+  const getProjectId = (name: string) => projects.find((p) => p.name === name)!.id;
+  const getSystemId = (name: string) => systems.find((s) => s.name === name)!.id;
+  const getDatasetId = (name: string) => datasets.find((d) => d.name === name)!.id;
 
-  await prisma.evaluation.upsert({
-    where: { id: 3 },
-    update: {},
-    create: {
-      id: 3,
-      projectId: 1,
-      systemId: 3,
-      datasetId: 1,
-      accuracy: 0.9,
-      relevancy: 0.7,
-      helpfulness: 0.9,
-      toxicity: 0.1,
-      score: 0.8,
-    },
-  });
-
-  await prisma.evaluation.upsert({
-    where: { id: 4 },
-    update: {},
-    create: {
-      id: 4,
-      projectId: 1,
-      systemId: 3,
-      datasetId: 2,
-      accuracy: 0.9,
-      relevancy: 0.8,
-      helpfulness: 0.6,
-      toxicity: 0.2,
-      score: 0.8,
-    },
-  });
-
-  await prisma.evaluation.upsert({
-    where: { id: 5 },
-    update: {},
-    create: {
-      id: 5,
-      projectId: 2,
-      systemId: 4,
-      datasetId: 3,
-      accuracy: 0.9,
-      relevancy: 0.8,
-      helpfulness: 0.7,
-      toxicity: 0.1,
-      score: 0.8,
-    },
-  });
-
-  await prisma.evaluation.upsert({
-    where: { id: 6 },
-    update: {},
-    create: {
-      id: 6,
-      projectId: 2,
-      systemId: 5,
-      datasetId: 3,
-      accuracy: 0.8,
-      relevancy: 0.7,
-      helpfulness: 0.6,
-      toxicity: 0.2,
-      score: 0.7,
-    },
-  });
-
-  await prisma.evaluation.upsert({
-    where: { id: 7 },
-    update: {},
-    create: {
-      id: 7,
-      projectId: 2,
-      systemId: 6,
-      datasetId: 3,
-      accuracy: 0.9,
-      relevancy: 0.7,
-      helpfulness: 0.9,
-      toxicity: 0.1,
-      score: 0.8,
-    },
-  });
-
-  await prisma.evaluation.upsert({
-    where: { id: 8 },
-    update: {},
-    create: {
-      id: 8,
-      projectId: 2,
-      systemId: 7,
-      datasetId: 3,
-      accuracy: 0.9,
-      relevancy: 0.8,
-      helpfulness: 0.6,
-      toxicity: 0.2,
-      score: 0.8,
-    },
-  });
-
-  await prisma.evaluation.upsert({
-    where: { id: 9 },
-    update: {},
-    create: {
-      id: 9,
-      projectId: 3,
-      systemId: 8,
-      datasetId: 4,
-      accuracy: 0.9,
-      relevancy: 0.8,
-      helpfulness: 0.7,
-      toxicity: 0.1,
-      score: 0.8,
-    },
-  });
-
-  await prisma.evaluation.upsert({
-    where: { id: 10 },
-    update: {},
-    create: {
-      id: 10,
-      projectId: 3,
-      systemId: 9,
-      datasetId: 4,
-      accuracy: 0.8,
-      relevancy: 0.7,
-      helpfulness: 0.6,
-      toxicity: 0.2,
-      score: 0.7,
-    },
+  await prisma.evaluation.createMany({
+    data: [
+      { projectId: getProjectId("customer help"), systemId: getSystemId("Mixtral-8x7B-finetuned"), datasetId: getDatasetId("QandA01"), accuracy: 0.9, relevancy: 0.8, helpfulness: 0.7, toxicity: 0.1, score: 0.8 },
+      { projectId: getProjectId("customer help"), systemId: getSystemId("Mixtral-8x7B-prompt01"), datasetId: getDatasetId("QandA01"), accuracy: 0.8, relevancy: 0.7, helpfulness: 0.6, toxicity: 0.2, score: 0.7 },
+      { projectId: getProjectId("customer help"), systemId: getSystemId("Mixtral-8x7B-prompt02"), datasetId: getDatasetId("QandA01"), accuracy: 0.9, relevancy: 0.7, helpfulness: 0.9, toxicity: 0.1, score: 0.8 },
+      { projectId: getProjectId("customer help"), systemId: getSystemId("Mixtral-8x7B-prompt02"), datasetId: getDatasetId("QandA02"), accuracy: 0.9, relevancy: 0.8, helpfulness: 0.6, toxicity: 0.2, score: 0.8 },
+      { projectId: getProjectId("TOS extractor"), systemId: getSystemId("Llama3_RAG_ch200_th07"), datasetId: getDatasetId("TOS01"), accuracy: 0.9, relevancy: 0.8, helpfulness: 0.7, toxicity: 0.1, score: 0.8 },
+      { projectId: getProjectId("TOS extractor"), systemId: getSystemId("Llama3_RAG_ch250_th07"), datasetId: getDatasetId("TOS01"), accuracy: 0.8, relevancy: 0.7, helpfulness: 0.6, toxicity: 0.2, score: 0.7 },
+      { projectId: getProjectId("TOS extractor"), systemId: getSystemId("Mixtral_RAG_ch200_th08"), datasetId: getDatasetId("TOS01"), accuracy: 0.9, relevancy: 0.7, helpfulness: 0.9, toxicity: 0.1, score: 0.8 },
+      { projectId: getProjectId("TOS extractor"), systemId: getSystemId("Mixtral_RAG_ch200_th07"), datasetId: getDatasetId("TOS01"), accuracy: 0.9, relevancy: 0.8, helpfulness: 0.6, toxicity: 0.2, score: 0.8 },
+      { projectId: getProjectId("pdf2json"), systemId: getSystemId("GPT4o-base"), datasetId: getDatasetId("CustomerPetition01"), accuracy: 0.9, relevancy: 0.8, helpfulness: 0.7, toxicity: 0.1, score: 0.8 },
+      { projectId: getProjectId("pdf2json"), systemId: getSystemId("llama-11b-vision-instruct-base"), datasetId: getDatasetId("CustomerPetition01"), accuracy: 0.8, relevancy: 0.7, helpfulness: 0.6, toxicity: 0.2, score: 0.7 },
+    ],
   });
 }
 

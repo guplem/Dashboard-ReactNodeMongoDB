@@ -1,6 +1,6 @@
+import { PrismaClient } from "@prisma/client";
 import { Post } from "../../domain/models/post";
 import { PostRepository } from "../../domain/repositories/postRepository";
-import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -27,8 +27,7 @@ export class PrismaPostRepository implements PostRepository {
     const total = await prisma.post.count({ where: filter });
     return { posts: posts.map((post) => Post.fromMap(post)), total };
   }
-
-  async getOne(id: number): Promise<Post> {
+  async getOne(id: string): Promise<Post> {
     const post = await prisma.post.findUnique({ where: { id } });
     if (!post) throw new Error("Post not found");
     return Post.fromMap(post);
@@ -54,7 +53,7 @@ export class PrismaPostRepository implements PostRepository {
     return Post.fromMap(createdPost);
   }
 
-  async update(id: number, post: Post): Promise<Post> {
+  async update(id: string, post: Post): Promise<Post> {
     const updatedPost = await prisma.post.update({
       where: { id },
       data: {
@@ -65,7 +64,7 @@ export class PrismaPostRepository implements PostRepository {
     return Post.fromMap(updatedPost);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await prisma.post.delete({ where: { id } });
   }
 }

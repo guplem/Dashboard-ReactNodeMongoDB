@@ -1,7 +1,7 @@
 import { Model } from "./iModel";
 
 export class Post extends Model<Post> {
-  constructor(public id: number, public title: string, public content: string | null, public createdAt: Date) {
+  constructor(public id: string, public title: string, public content: string | null, public createdAt: Date) {
     super();
   }
 

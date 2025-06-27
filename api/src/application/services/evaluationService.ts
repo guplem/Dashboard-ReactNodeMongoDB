@@ -1,8 +1,6 @@
 import { Evaluation } from "../../domain/models/evaluation";
 import { EvaluationRepository } from "../../domain/repositories/evaluationRepository";
 
-
-
 export class EvaluationService {
   constructor(private readonly EvaluationRepository: EvaluationRepository) {}
 
@@ -13,10 +11,8 @@ export class EvaluationService {
   getList(sort: string[], range: number[], filter: { [key: string]: any }): Promise<{ evaluations: Evaluation[]; total: number }> {
     return this.EvaluationRepository.getList(sort, range, filter);
   }
-
   getOne(id: number | string): Promise<Evaluation> {
-    const idNumber = typeof id === "string" ? parseInt(id, 10) : id;
-    return this.EvaluationRepository.getOne(idNumber);
+    return this.EvaluationRepository.getOne(id as string);
   }
 
   getMany(filter: { [key: string]: any }): Promise<Evaluation[]> {
@@ -28,12 +24,10 @@ export class EvaluationService {
   }
 
   update(id: number | string, Evaluation: Evaluation): Promise<Evaluation> {
-    const idNumber = typeof id === "string" ? parseInt(id, 10) : id;
-    return this.EvaluationRepository.update(idNumber, Evaluation);
+    return this.EvaluationRepository.update(id as string, Evaluation);
   }
 
   delete(id: number | string): Promise<void> {
-    const idNumber = typeof id === "string" ? parseInt(id, 10) : id;
-    return this.EvaluationRepository.delete(idNumber);
+    return this.EvaluationRepository.delete(id as string);
   }
 }

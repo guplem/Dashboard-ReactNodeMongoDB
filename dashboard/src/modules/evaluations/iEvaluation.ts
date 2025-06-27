@@ -1,9 +1,9 @@
 export interface Evaluation {
-  id: number;
+  id: string;
   score: number;
-  project: { id: number; name: string };
-  system: { id: number; name: string };
-  dataset: { id: number; name: string };
+  project: { id: string; name: string };
+  system: { id: string; name: string };
+  dataset: { id: string; name: string };
   date: Date;
   accuracy: number;
   helpfulness: number;

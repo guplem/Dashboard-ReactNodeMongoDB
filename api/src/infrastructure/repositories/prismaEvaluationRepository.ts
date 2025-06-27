@@ -1,9 +1,6 @@
-import { Dataset } from "../../domain/models/dataset";
-import { Evaluation } from "../../domain/models/evaluation";
-import { Project } from "../../domain/models/project";
-import { System } from "../../domain/models/system";
-import { EvaluationRepository } from "../../domain/repositories/evaluationRepository";
 import { PrismaClient } from "@prisma/client";
+import { Evaluation } from "../../domain/models/evaluation";
+import { EvaluationRepository } from "../../domain/repositories/evaluationRepository";
 
 const prisma = new PrismaClient();
 
@@ -39,7 +36,7 @@ export class PrismaEvaluationRepository implements EvaluationRepository {
     };
   }
 
-  async getOne(id: number): Promise<Evaluation> {
+  async getOne(id: string): Promise<Evaluation> {
     const evaluation = await prisma.evaluation.findUnique({
       where: { id },
       include: {
@@ -94,7 +91,7 @@ export class PrismaEvaluationRepository implements EvaluationRepository {
     return Evaluation.fromMap(createdEvaluation);
   }
 
-  async update(id: number, evaluation: Evaluation): Promise<Evaluation> {
+  async update(id: string, evaluation: Evaluation): Promise<Evaluation> {
     const updatedEvaluation = await prisma.evaluation.update({
       where: { id },
       data: {
@@ -112,7 +109,7 @@ export class PrismaEvaluationRepository implements EvaluationRepository {
     return Evaluation.fromMap(updatedEvaluation);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await prisma.evaluation.delete({ where: { id } });
   }
 }

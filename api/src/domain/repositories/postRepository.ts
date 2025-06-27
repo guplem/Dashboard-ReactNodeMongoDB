@@ -9,24 +9,23 @@ export interface PostRepository {
    * @returns A promise that resolves to an object containing the posts and the total count.
    */
   getList(sort: string[], range: number[], filter: { [key: string]: any }): Promise<{ posts: Post[]; total: number }>;
-
   /**
    * Retrieves a single post by its ID.
-   * @param id - The ID of the post, e.g., 123
+   * @param id - The ID of the post, e.g., "507f1f77bcf86cd799439011"
    * @returns A promise that resolves to the post.
    */
-  getOne(id: number): Promise<Post>;
+  getOne(id: string): Promise<Post>;
 
   /**
    * Retrieves multiple posts based on filter criteria.
-   * @param filter - Object containing filter criteria, e.g., {"ids":[123,456,789]}.
+   * @param filter - Object containing filter criteria, e.g., {"ids":["507f1f77bcf86cd799439011","507f1f77bcf86cd799439012"]}.
    * @returns A promise that resolves to an array of posts.
    */
   getMany(filter: { [key: string]: any }): Promise<Post[]>;
 
   /**
    * Retrieves multiple posts based on reference filter criteria.
-   * @param filter - Object containing reference filter criteria, e.g., {"author_id":345}.
+   * @param filter - Object containing reference filter criteria, e.g., {"author_id":"507f1f77bcf86cd799439013"}.
    * @returns A promise that resolves to an array of posts.
    */
   getManyReference(filter: { [key: string]: any }): Promise<Post[]>;
@@ -40,16 +39,16 @@ export interface PostRepository {
 
   /**
    * Updates a post by its ID.
-   * @param id - The ID of the post, e.g., 123
+   * @param id - The ID of the post, e.g., "507f1f77bcf86cd799439011"
    * @param post - The post data to update.
    * @returns A promise that resolves to the updated post.
    */
-  update(id: number, post: Post): Promise<Post>;
+  update(id: string, post: Post): Promise<Post>;
 
   /**
    * Deletes a post by its ID.
-   * @param id - The ID of the post, e.g., 123
+   * @param id - The ID of the post, e.g., "507f1f77bcf86cd799439011"
    * @returns A promise that resolves when the post is deleted.
    */
-  delete(id: number): Promise<void>;
+  delete(id: string): Promise<void>;
 }
