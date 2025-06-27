@@ -6,3 +6,5 @@ node_modules
 # This directory contains database files that are generated and managed by the database system.
 # They are not needed in version control.
 /database/data
+
+*repomix*
