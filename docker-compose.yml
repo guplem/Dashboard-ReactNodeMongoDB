@@ -32,15 +32,13 @@ services:
       - app-network
   database:
     image: mongo:8.0.10 # Use the official MongoDB image from Docker Hub
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: db-password-secure
     ports:
       - "27017:27017"
     volumes:
       - ./database/data:/data/db # Persist data within the host machine
     networks:
       - app-network
+    command: mongod --replSet rs0 --bind_ip_all
 
 networks:
   app-network:

@@ -1,6 +1,14 @@
 # Use official Node.js image as a parent image
 FROM node:22
 
+# Install MongoDB Shell (mongosh) for replica set initiation
+RUN apt-get update && apt-get install -y gnupg curl && \
+    curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg && \
+    echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/7.0 main" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list && \
+    apt-get update && \
+    apt-get install -y mongodb-mongosh && \
+    rm -rf /var/lib/apt/lists/*
+
 # Download wait-for-it.sh script to wait for MongoDB connection to be ready
 RUN curl -o /usr/local/bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && \
     chmod +x /usr/local/bin/wait-for-it.sh

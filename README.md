@@ -258,3 +258,24 @@ Follow these steps to set up the project locally and run it using Docker Compose
    ```bash
    docker-compose down
    ```
+
+## Local Development Database Configuration
+
+The local MongoDB instance is configured as a single-node replica set to support Prisma's upsert operations. This is required for idempotent seeding and transactional features.
+
+- The Docker Compose file starts MongoDB with `--replSet rs0`.
+- The API's entrypoint script will automatically initialize the replica set if it is not already initialized.
+- The connection string in `.env` and `.env.example` includes the `replicaSet=rs0` parameter:
+
+  ```env
+  DATABASE_URL="mongodb://root:db-password-secure@database:27017/mydb?authSource=admin&replicaSet=rs0"
+  ```
+
+**Note:** You must rebuild your containers after these changes:
+
+```sh
+# Rebuild and start all services
+pwsh.exe -Command "docker-compose up --build"
+```
+
+This ensures that Prisma's `upsert` and other transactional operations work as expected in development.
