@@ -20,13 +20,13 @@ This project is a full-stack application designed to monitor and track the confo
 
 ### 3. **Database (MongoDB)**
 
-- **MongoDB**: Stores system and evaluation data in a MongoDB database. For production, this is hosted on MongoDB Atlas.
-- **Prisma**: Ensures efficient and reliable database access and management.
+- **MongoDB**: Stores system and evaluation data.
+- **Prisma**: Ensures efficient and reliable database access. For Prisma to support all its features (like transactions for `upsert` operations), MongoDB must be run as a **replica set**.
 
 ### 4. **Containerization (Docker & Docker Compose)**
 
 - **Docker**: Packages the frontend, API, and MongoDB database into isolated containers.
-- **Docker Compose**: Manages multi-container applications, networking, and volumes.
+- **Docker Compose**: Manages the multi-container application, networking, and volumes for local development.
 
 ### 5. **Testing Tools**
 
@@ -46,9 +46,7 @@ This project is a full-stack application designed to monitor and track the confo
 
 ### Main (Dashboard's Home) View
 
-The main dashboard view shows a list of the top 10 performing projects in a bar chart. The chart displays the conformity progress of each project, allowing users to compare the progress visually.
-
-Tapping on a project will navigate to the project's view.
+The main dashboard view shows a list of the top 10 performing projects in a bar chart. The chart displays the conformity progress of each project, allowing users to compare the progress visually. Tapping on a project will navigate to the project's view.
 
 > It also includes a link to the _API test_ view, which displays a simple _hello world_ message from the API if that service is running and accessible.
 
@@ -56,29 +54,23 @@ Tapping on a project will navigate to the project's view.
 
 A list of all projects is displayed in a table format, showing the project name, type and conformity progress. Users can click on a project to view detailed evaluation results for that project.
 
-> The list can be exported to a CSV file by clicking on the export button.
-
-> The items can be selected and deleted by clicking on the delete button.
+> The list can be exported to a CSV file by clicking on the export button. The items can be selected and deleted by clicking on the delete button.
 
 ### Project View
 
-The page displays the project's name and type alongisde a visual representation of the conformity progress with a pie chart with a needle pointing to the current progress.
-
-In addition, a list of the distincts evaluations performed to the project are displayed, sorted by score, with a pie chart with a needle pointing to the evaluation's score and showing the evaluation's system and dataset.
+The page displays the project's name and type alongside a visual representation of the conformity progress with a pie chart with a needle pointing to the current progress. In addition, a list of the distinct evaluations performed on the project are displayed, sorted by score.
 
 > Tapping on an evaluation will navigate to the evaluation's view.
 
 ### Evaluations List View
 
-A list of all evaluations is displayed in a table format, showing the project they are related to, system, dataset, score, and other metrics (accuracy, relevancy, helpfulness, and toxicity). Users can click on an evaluation to view detailed evaluation results for that system in the Evaluation View.
+A list of all evaluations is displayed in a table format, showing the project they are related to, system, dataset, score, and other metrics (accuracy, relevancy, helpfulness, and toxicity).
 
-> The list can be exported to a CSV file by clicking on the export button.
-
-> The items can be selected and deleted by clicking on the delete button.
+> The list can be exported to a CSV file by clicking on the export button. The items can be selected and deleted by clicking on the delete button.
 
 ### Evaluation View
 
-The page displays the evaluation's project, system, dataset, score, and other metrics (accuracy, relevancy, helpfulness, and toxicity) alongside a visual representation of the different performance of the distinct metrics in a radar chart.
+The page displays the evaluation's project, system, dataset, score, and other metrics alongside a visual representation of the distinct metrics in a radar chart.
 
 ### Edit views
 
@@ -125,101 +117,24 @@ The **frontend** communicates with the **backend** via RESTful APIs to fetch and
 
 The project is containerized for both development and production.
 
-### Development
+### Development Configuration
 
 - **Frontend**: Served on `http://localhost:3000`.
 - **Backend**: Available at `http://localhost:3001`.
 - **Database**: MongoDB accessible at `localhost:27017`.
 
-> The development uses the .env files to configure the services.
+#### Local Database: Single-Node Replica Set
 
-### Production
+For local development, we need to accommodate Prisma's requirements while keeping the setup simple.
 
-- Deployed using **Google Cloud Platform (GCP)** services like **Cloud Run** and **MongoDB Atlas**.
+-   **Why is this needed?** [Prisma's transactional features](https://www.prisma.io/docs/orm/reference/prisma-client-reference#transactions-in-mongodb), which are used for operations like `upsert` in the seeding script, require MongoDB to be configured as a **replica set**. A standalone instance is not sufficient. You can learn more about [MongoDB Replica Sets here](https://www.mongodb.com/docs/manual/replication/).
 
-> The production configuration is set up in .YAML files for the services in the cloud.
+-   **How is it automated?**
+    1.  **`docker-compose.yml`**: The `database` service is started with the `mongod --replSet rs0` command, instructing it to run as part of a replica set named `rs0`.
+    2.  **`api/entrypoint.sh`**: When the `api` container starts, this script checks if the replica set has been initialized. If not, it automatically runs the `rs.initiate()` command to configure the single-node replica set.
+    3.  **`api/.env`**: The `DATABASE_URL` connection string includes the `replicaSet=rs0` parameter, which tells the Prisma client to connect to the replica set.
 
----
-
-## Database Schema Management
-
-With MongoDB, Prisma does not use SQL-style migrations. Schema changes are managed directly through the `schema.prisma` file.
-
-#### Applying Schema Changes
-
-1.  **Update the Prisma schema** in `api/prisma/schema.prisma`.
-
-2.  **Regenerate the Prisma client** to reflect the changes:
-    ```bash
-    npx prisma generate
-    ```
-
-In development, you can use `npx prisma db push` to sync your schema with the database, but this is often not necessary.
-
----
-
-## Deployment to Google Cloud Platform (GCP)
-
-The project uses **GCP Cloud Run** for services and **MongoDB Atlas** for a scalable, managed database.
-
-### Prerequisites
-
-- Install the **Google Cloud CLI**.
-- Authenticate with Docker:
-
-  ```bash
-  gcloud auth configure-docker eu.gcr.io
-  ```
-
-### API Deployment
-
-1. **Build the Docker image**:
-
-   ```bash
-   docker build -f api/docker/prod/Dockerfile -t dashboard-api .
-   ```
-
-2. **Tag the image**:
-
-   ```bash
-   docker tag dashboard-api eu.gcr.io/dashboard-reactnodemongo/dashboard-api:latest
-   ```
-
-3. **Push the image to Artifact Registry**:
-
-   ```bash
-   docker push eu.gcr.io/dashboard-reactnodemongo/dashboard-api:latest
-   ```
-
-4. Deploy in **Cloud Run**:
-   - Open the Cloud Run console.
-   - Select `Edit and deploy new revision`.
-   - Choose the newly pushed image.
-
-### Frontend Deployment
-
-1. **Build the Docker image**:
-
-   ```bash
-   docker build -f dashboard/docker/prod/Dockerfile -t dashboard-front .
-   ```
-
-2. **Tag the image**:
-
-   ```bash
-   docker tag dashboard-front eu.gcr.io/dashboard-reactnodemongo/dashboard-front:latest
-   ```
-
-3. **Push the image to Artifact Registry**:
-
-   ```bash
-   docker push eu.gcr.io/dashboard-reactnodemongo/dashboard-front:latest
-   ```
-
-4. Deploy in **Cloud Run**:
-   - Open the Cloud Run console.
-   - Select `Edit and deploy new revision`.
-   - Choose the newly pushed image.
+This setup provides the transactional capabilities Prisma needs without requiring developers to manually configure a multi-node database cluster locally.
 
 ---
 
@@ -235,47 +150,81 @@ Follow these steps to set up the project locally and run it using Docker Compose
 
 ### Steps
 
-1. Clone the repository:
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/guplem/Dashboard-ReactNodeMongoDB.git
+    cd Dashboard-ReactNodeMongoDB
+    ``` 
 
-   ```bash
-   git clone https://github.com/guplem/Dashboard-ReactNodeMongoDB.git
-   cd Dashboard-ReactNodeMongoDB
-   ```
+2.  Build and start the containers:
+    ```bash
+    docker-compose up --build
+    ```
+    The `--build` flag is only necessary the first time or after changing Dockerfiles or dependencies.
 
-2. Build and start the containers:
+3.  Access the application:
+    -   Frontend: [http://localhost:3000](http://localhost:3000)
+    -   Backend: [http://localhost:3001](http://localhost:3001)
 
-   ```bash
-   docker-compose up --build
-   ```
+4.  Stop and remove all containers:
+    ```bash
+    # Stop containers
+    docker-compose down
+    
+    # Stop and remove the database volume if you need a clean slate
+    docker-compose down -v
+    ```
 
-3. Access the application:
+---
 
-   - Frontend: [http://localhost:3000](http://localhost:3000)
-   - Backend: [http://localhost:3001](http://localhost:3001)
+## Deployment to Google Cloud Platform (GCP)
 
-4. Stop and remove all containers:
+The project is designed to be deployed using **GCP Cloud Run** for services and **MongoDB Atlas** for a scalable, managed database.
 
-   ```bash
-   docker-compose down
-   ```
+**Note:** Managed database services like MongoDB Atlas provide a replica set connection string by default. The automatic initialization in `entrypoint.sh` is for local development only and is not needed for a production environment pointing to Atlas. For production, you would use the full connection string from Atlas in your environment variables.
 
-## Local Development Database Configuration
+### Prerequisites
 
-The local MongoDB instance is configured as a single-node replica set to support Prisma's upsert operations. This is required for idempotent seeding and transactional features.
+-   Install the **Google Cloud CLI**.
+-   Authenticate with Docker: `gcloud auth configure-docker eu.gcr.io`
 
-- The Docker Compose file starts MongoDB with `--replSet rs0`.
-- The API's entrypoint script will automatically initialize the replica set if it is not already initialized.
-- The connection string in `.env` and `.env.example` includes the `replicaSet=rs0` parameter:
+### API Deployment
 
-  ```env
-  DATABASE_URL="mongodb://root:db-password-secure@database:27017/mydb?authSource=admin&replicaSet=rs0"
-  ```
+1.  **Build the Docker image**:
+    ```bash
+    docker build -f api/docker/prod/Dockerfile -t dashboard-api .
+    ```
 
-**Note:** You must rebuild your containers after these changes:
+2.  **Tag the image** for your GCP Artifact Registry:
+    ```bash
+    docker tag dashboard-api eu.gcr.io/YOUR_GCP_PROJECT_ID/dashboard-api:latest
+    ```
 
-```sh
-# Rebuild and start all services
-pwsh.exe -Command "docker-compose up --build"
-```
+3.  **Push the image**:
+    ```bash
+    docker push eu.gcr.io/YOUR_GCP_PROJECT_ID/dashboard-api:latest
+    ```
 
-This ensures that Prisma's `upsert` and other transactional operations work as expected in development.
+4.  **Deploy in Cloud Run**:
+    -   Open the Cloud Run console.
+    -   Select `Edit and deploy new revision`.
+    -   Choose the newly pushed image and configure necessary environment variables (like the production `DATABASE_URL`).
+
+### Frontend Deployment
+
+1.  **Build the Docker image**:
+    ```bash
+    docker build -f dashboard/docker/prod/Dockerfile -t dashboard-front .
+    ```
+
+2.  **Tag the image**:
+    ```bash
+    docker tag dashboard-front eu.gcr.io/YOUR_GCP_PROJECT_ID/dashboard-front:latest
+    ```
+
+3.  **Push the image**:
+    ```bash
+    docker push eu.gcr.io/YOUR_GCP_PROJECT_ID/dashboard-front:latest
+    ```
+
+4.  **Deploy in Cloud Run**, configuring the `REACT_APP_API_URL` environment variable to point to your deployed API's URL.
